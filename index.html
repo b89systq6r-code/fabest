@@ -544,6 +544,7 @@ function doLogin(){
   sessionStorage.setItem('fabest_user',name);
   document.getElementById('login-screen').style.display='none';
   showUserBadge(name);
+  showPage('magazyn');
   renderAll();
 }
 
@@ -560,6 +561,7 @@ function checkLogin(){
   if(user){
     document.getElementById('login-screen').style.display='none';
     showUserBadge(user);
+    showPage('magazyn');
   } else {
     document.getElementById('login-pass')?.focus();
   }
