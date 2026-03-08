@@ -26,7 +26,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
 ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
-#app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box;}
 
 /* NAV */
 #topnav{display:flex;align-items:stretch;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;height:52px;overflow:hidden;}
@@ -45,7 +45,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .si-green .stat-num{color:var(--green-bright);}.si-yellow .stat-num{color:var(--accent);}.si-gold .stat-num{color:var(--gold);}
 #mob-btn{display:none;background:none;border:none;color:var(--text);font-size:20px;padding:0 12px;cursor:pointer;}
 
-#body{display:flex;flex:1;overflow:hidden;}#fullpage-wrap{display:contents;}
+#body{display:flex;flex:1;overflow:hidden;}#fullpage-wrap{flex:1;overflow-y:auto;padding:16px 15px;box-sizing:border-box;}
 
 /* SIDEBAR */
 #sidebar{width:215px;min-width:215px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:9px;}
@@ -211,7 +211,7 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
   #fab-add{display:none;}
   #bottom-nav{display:flex !important;}
   #app{padding-bottom:env(safe-area-inset-bottom,0px);}
-  .app-mobile #app{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px));}
+  .app-mobile #app{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px)) !important;}
   .nav-tabs{display:none !important;}
   .stat-strip{gap:8px;}
   .stat-num{font-size:14px;}
@@ -222,7 +222,7 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
   #bottom-nav{display:none !important;}
 }
 /* BOTTOM NAV */
-#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
+#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;padding:0;transition:color .15s;border-top:2px solid transparent;}
 .bnav-btn.active{color:var(--accent);border-top-color:var(--accent);}
 .bnav-btn .bnav-icon{font-size:20px;line-height:1;}
@@ -358,7 +358,7 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
 
   </main>
 </div>
-<div id="fullpage-wrap" style="display:none;flex:1;overflow:auto;padding:16px 20px;">
+<div id="fullpage-wrap" style="display:none;">
   <div id="page-analizy" style="display:none">
       <div class="sec-hdr"><h2>Analizy — działalność nierejestrowana</h2></div>
       <div class="period-tabs" id="period-tabs"></div>
