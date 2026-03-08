@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="100" fill="#0b0f0b"/>
+  <rect x="14" y="14" width="484" height="484" rx="86" fill="none" stroke="#c8f135" stroke-width="20"/>
+  <text x="256" y="195" font-family="Arial Black,sans-serif" font-size="148" font-weight="900"
+        fill="#c8f135" text-anchor="middle">FA</text>
+  <text x="256" y="365" font-family="Arial Black,sans-serif" font-size="148" font-weight="900"
+        fill="#c8f135" text-anchor="middle">BEST</text>
+  <rect x="90" y="390" width="332" height="14" rx="7" fill="#c8f135" opacity="0.35"/>
+</svg>
