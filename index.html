@@ -336,6 +336,9 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
 </nav>
 <div id="body">
   <aside id="sidebar">
+    <div class="sb-section" style="padding-bottom:6px">
+      <button onclick="resetAllFilters()" id="btn-reset-filters" style="width:100%;background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.4px">🔄 Resetuj wszystkie filtry</button>
+    </div>
     <div class="sb-section"><h5>🔍 Szukaj</h5>
       <input type="search" id="q" placeholder="wpisz markę, kolor…" oninput="applyFilters()"></div>
     <div class="sb-section"><h5>Status</h5><div class="sb-chips">
@@ -395,7 +398,10 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
     <div id="page-magazyn">
       <!-- MOBILE FILTER BAR -->
       <div id="mob-filter-bar">
-        <input type="search" id="mob-q" placeholder="🔍 Szukaj produktu, marki, koloru…" oninput="mobSearch(this.value)">
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="search" id="mob-q" placeholder="🔍 Szukaj produktu, marki, koloru…" oninput="mobSearch(this.value)" style="flex:1">
+          <button onclick="resetAllFilters()" style="flex-shrink:0;background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer;white-space:nowrap">🔄</button>
+        </div>
         <div class="mob-filter-row">
           <select id="mob-kat" onchange="mobSetFilt('kat',this.value)" class="mob-sel"><option value="">Kategoria</option></select>
           <select id="mob-prod" onchange="mobSetFilt('prod',this.value)" class="mob-sel"><option value="">Produkt</option></select>
@@ -2390,6 +2396,24 @@ function showPage(p){
 function closeModal(){document.getElementById('overlay').classList.remove('open');editId=null;photoB64=null;}
 function bgClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
 function renderAll(){renderStats();renderChips();applyFilters();}
+function resetAllFilters(){
+  filt={status:new Set(['active','wolny','sold']),konta:new Set()};
+  ['filt-produkt','filt-marka','filt-rozmiar','filt-kolor','filt-kategoria','q'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  ['mob-q','mob-kat','mob-prod','mob-marka','mob-rozmiar','mob-kolor'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  // Wizualny reset chipów statusu na mobile
+  document.querySelectorAll('#mob-status-chips .mob-fchip').forEach(c=>c.classList.add('on'));
+  // Wizualny reset chipów kont na desktop
+  document.querySelectorAll('.sb-chips .chip[data-f="status"]').forEach(c=>c.classList.add('on'));
+  document.querySelectorAll('.sb-chips .chip[data-f="konta"]').forEach(c=>c.classList.remove('on'));
+  okresTyp='all';okresVal='';
+  setOkresTyp('all');
+  renderAll();
+  toast('🔄 Filtry zresetowane');
+}
 initSidebarLists();
 showPage('magazyn');  // zawsze zaczynamy na magazynie
 checkLogin();         // ukryje app jeśli niezalogowany
