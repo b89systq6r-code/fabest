@@ -204,14 +204,34 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
 #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 16px;border-radius:3px;font-size:12px;font-weight:500;z-index:200;opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6);}
 #toast.show{opacity:1;}
 @media(max-width:850px){
-  #sidebar{display:none;position:fixed;left:0;top:52px;bottom:0;z-index:50;width:260px;box-shadow:4px 0 20px rgba(0,0,0,.6);}
+  #sidebar{display:none;position:fixed;left:0;top:52px;bottom:60px;z-index:50;width:260px;box-shadow:4px 0 20px rgba(0,0,0,.6);}
   #sidebar.open{display:flex;}
   #mob-btn{display:flex;align-items:center;}
   #sidebar-overlay{display:none;position:fixed;inset:0;z-index:49;background:rgba(0,0,0,.5);}
   #sidebar-overlay.open{display:block;}
-  #fab-add{display:flex;position:fixed;bottom:24px;right:20px;z-index:60;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;border:none;font-size:28px;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.5);font-weight:bold;}
+  #fab-add{display:none;}
+  /* dolna nawigacja */
+  #bottom-nav{display:flex;}
+  #app{padding-bottom:60px;}
+  /* ukryj górne taby na mobile — zastąpione dolną nawigacją */
+  .nav-tabs{display:none;}
+  #mob-btn{display:none;}
+  /* stat strip mniejszy */
+  .stat-strip{gap:8px;}
+  .stat-num{font-size:14px;}
+  .stat-lbl{font-size:8px;}
 }
-@media(min-width:851px){#fab-add{display:none;}}
+@media(min-width:851px){
+  #fab-add{display:none;}
+  #bottom-nav{display:none;}
+}
+/* BOTTOM NAV */
+#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;padding:0;transition:color .15s;border-top:2px solid transparent;}
+.bnav-btn.active{color:var(--accent);border-top-color:var(--accent);}
+.bnav-btn .bnav-icon{font-size:20px;line-height:1;}
+.bnav-btn.bnav-add{color:#000;background:var(--accent);border-radius:0;}
+/* BOTTOM NAV */
 /* LOGIN */
 #login-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
 #login-box{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:36px 32px;width:100%;max-width:360px;text-align:center;}
@@ -248,7 +268,7 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
 </div>
 <div id="app">
 <nav id="topnav">
-  <button id="mob-btn" onclick="toggleSidebar()">☰</button>
+  <button id="mob-btn" onclick="toggleSidebar()" style="display:none" title="Filtry">☰</button>
   <div class="nav-tabs">
     <button class="nav-tab active" id="tab-magazyn" onclick="showPage('magazyn')">📦 Magazyn</button>
     <button class="nav-tab" id="tab-analizy"  onclick="showPage('analizy')">📊 Analizy</button>
@@ -423,6 +443,23 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
       <div id="hist-list"></div>
     </div>
 </div>
+  <nav id="bottom-nav">
+    <button class="bnav-btn active" id="bnav-magazyn" onclick="showPage('magazyn')">
+      <span class="bnav-icon">📦</span>Magazyn
+    </button>
+    <button class="bnav-btn" id="bnav-analizy" onclick="showPage('analizy')">
+      <span class="bnav-icon">📊</span>Analizy
+    </button>
+    <button class="bnav-btn bnav-add" id="bnav-dodaj" onclick="openAddModal()">
+      <span class="bnav-icon" style="font-size:26px;font-weight:bold">＋</span>
+    </button>
+    <button class="bnav-btn" id="bnav-historia" onclick="showPage('historia')">
+      <span class="bnav-icon">📋</span>Historia
+    </button>
+    <button class="bnav-btn" id="bnav-settings" onclick="showPage('settings')">
+      <span class="bnav-icon">⚙️</span>Ustawienia
+    </button>
+  </nav>
 </div><!-- #app -->
 <div id="overlay" onclick="bgClose(event)"><div id="modal"><button class="modal-close" onclick="closeModal()">✕</button><div id="modal-body"></div></div></div>
 <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(event)">
@@ -1569,15 +1606,20 @@ function openItem(id){
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px" id="right-col-edit">
-        <div><label>Produkt</label>${simpleSelect('e-produkt',ALL_PRODUCTS,(item.produkt||'').trim())}</div>
-        <div><label>Marka</label>${simpleSelect('e-marka',ALL_MARKI,(item.marka||'').trim())}</div>
-        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,(item.kolor||'').trim())}</div>
-        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,(item.rozmiar||'').trim())}</div>
         <div><label>Kategoria</label>
-          <select id="e-kategoria" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+          <select id="e-kategoria" onchange="filterProdByKat()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+            <option value="">— wybierz kategorię —</option>
             ${[...KATEGORIE,...(state.kategorie||[])].map(k=>`<option value="${k.id}" ${(item.kategoria||getKatId(item.produkt))===k.id?'selected':''}>${k.icon} ${k.nazwa}</option>`).join('')}
           </select>
         </div>
+        <div><label>Produkt</label>
+          <select id="e-produkt" onchange="filterKatByProd()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+            ${(()=>{const katId=(item.kategoria||getKatId(item.produkt));const prods=katId?ALL_PRODUCTS.filter(p=>getKatId(p)===katId):ALL_PRODUCTS;const cur=(item.produkt||'').trim();return '<option value="">— wybierz produkt —</option>'+prods.map(p=>`<option ${cur===p?'selected':''}>${p}</option>`).join('');})()}
+          </select>
+        </div>
+        <div><label>Marka</label>${simpleSelect('e-marka',ALL_MARKI,(item.marka||'').trim())}</div>
+        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,(item.kolor||'').trim())}</div>
+        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,(item.rozmiar||'').trim())}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px">💡 Nowe produkty, marki i kolory dodasz w <b>⚙ Ustawienia</b></div>
       </div>
     </div>
@@ -1709,13 +1751,27 @@ function simpleSelect(id, items, curVal){
     ${items.map(v=>`<option ${curVal===v?'selected':''}>${v}</option>`).join('')}
   </select>`;
 }
-function onKatChange(){}
-function autoDetectKat(){
-  const prod=document.getElementById('e-produkt')?.value||'';
-  const katSel=document.getElementById('e-kategoria');
-  if(katSel&&prod){
-    const id=getKatId(prod);
-    [...katSel.options].forEach(o=>{if(o.value===id)o.selected=true;});
+function filterProdByKat(){
+  // Kategoria → filtruj produkty
+  const katId = document.getElementById('e-kategoria')?.value||'';
+  const sel = document.getElementById('e-produkt');
+  if(!sel) return;
+  const prods = katId ? ALL_PRODUCTS.filter(p => getKatId(p) === katId) : ALL_PRODUCTS;
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— wybierz produkt —</option>`
+    + prods.map(p=>`<option value="${p}" ${cur===p?'selected':''}>${p}</option>`).join('');
+}
+
+function filterKatByProd(){
+  // Produkt → ustaw kategorię automatycznie
+  const prod = document.getElementById('e-produkt')?.value||'';
+  const katSel = document.getElementById('e-kategoria');
+  if(!katSel || !prod) return;
+  const katId = getKatId(prod);
+  if(katId && katId !== 'inne') {
+    [...katSel.options].forEach(o => o.selected = o.value === katId);
+    // Przefiltruj produkty żeby pokazać tylko z tej kategorii
+    filterProdByKat();
   }
 }
 function openAddModal(){
@@ -1738,15 +1794,20 @@ function openAddModal(){
       </div>
       <!-- PRAWA: pola wyboru -->
       <div style="display:flex;flex-direction:column;gap:10px" id="right-col-add">
-        <div><label>Produkt *</label>${simpleSelect('e-produkt',ALL_PRODUCTS,'')}</div>
-        <div><label>Marka *</label>${simpleSelect('e-marka',ALL_MARKI,'')}</div>
-        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,'')}</div>
-        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,'')}</div>
-        <div><label>Kategoria</label>
-          <select id="e-kategoria" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+        <div><label>Kategoria *</label>
+          <select id="e-kategoria" onchange="filterProdByKat()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+            <option value="">— wybierz kategorię —</option>
             ${[...KATEGORIE,...(state.kategorie||[])].map(k=>`<option value="${k.id}">${k.icon} ${k.nazwa}</option>`).join('')}
           </select>
         </div>
+        <div><label>Produkt *</label>
+          <select id="e-produkt" onchange="filterKatByProd()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+            <option value="">— najpierw wybierz kategorię —</option>
+          </select>
+        </div>
+        <div><label>Marka *</label>${simpleSelect('e-marka',ALL_MARKI,'')}</div>
+        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,'')}</div>
+        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,'')}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px">💡 Nowe produkty, marki i kolory dodasz w <b>⚙ Ustawienia</b></div>
       </div>
     </div>
@@ -1792,7 +1853,7 @@ function addItem(){
   const produkt=document.getElementById('e-produkt').value.trim();
   const marka=document.getElementById('e-marka').value.trim();
   if(!produkt||!marka){toast('⚠ Podaj produkt i markę!');return;}
-  state.items.unshift({
+  const newItem = {
     id:state.nextId++,dataZakupu:document.getElementById('e-data-zakup').value,
     magazynPierwszy:null,konta:[],pochodzenie:document.getElementById('e-pochod').value,
     marka,produkt,szczegoly:document.getElementById('e-szczegoly').value||null,
@@ -1808,9 +1869,20 @@ function addItem(){
     cenaStartowa:null,dataWystawienia:null,
     cenaSprzedazy:null,zysk:null,sprzedany:false,
     portalSprzedazy:null,magazynSprzedazy:null,dataSprzedazy:null,kontrahent:null,foto:photoB64||null,
-  });
-  save();closeModal();renderAll();toast('✅ Dodano: '+produkt+' '+marka);
-  logHistory('dodano', state.items[0].id, produkt+' '+marka);
+  };
+  state.items.unshift(newItem);
+  // Upload zdjęcia do Firebase Storage
+  if(photoB64){
+    toast('⏳ Zapisuję zdjęcie...');
+    uploadPhotoToStorage(newItem.id, photoB64).then(url=>{
+      newItem.foto=url;
+      save();renderAll();toast('✅ Dodano ze zdjęciem: '+produkt+' '+marka);
+    }).catch(()=>{save();renderAll();toast('✅ Dodano (zdjęcie lokalne): '+produkt+' '+marka);});
+  } else {
+    save();renderAll();toast('✅ Dodano: '+produkt+' '+marka);
+  }
+  closeModal();
+  logHistory('dodano', newItem.id, produkt+' '+marka);
 }
 
 // SETTINGS
@@ -2137,8 +2209,15 @@ function showPage(p){
     const el=document.getElementById('page-'+n);
     if(el)el.style.display=n===p?'':'none';
   });
+  // górne taby (desktop)
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   const t=document.getElementById('tab-'+p);if(t)t.classList.add('active');
+  // dolna nawigacja (mobile)
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  const bn=document.getElementById('bnav-'+p);if(bn)bn.classList.add('active');
+  // hamburger tylko na magazyn (mobile)
+  const mobBtn = document.getElementById('mob-btn');
+  if(mobBtn) mobBtn.style.display = (isMag && window.innerWidth<=850) ? 'flex' : 'none';
   if(p==='settings')renderSettings();
   if(p==='analizy')renderAnalizy();
   if(p==='historia')renderHistoria();
@@ -2150,6 +2229,11 @@ initSidebarLists();
 checkLogin();
 renderAll();
 initFirebase();
+// Ustaw stan mob-btn na starcie
+(function(){
+  const mb=document.getElementById('mob-btn');
+  if(mb&&window.innerWidth<=850) mb.style.display='flex';
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){
