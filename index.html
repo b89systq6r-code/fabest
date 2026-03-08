@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>FABEST — Magazyn</title>
 <link rel="manifest" href="/fabest/manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -206,27 +206,23 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
 @media(max-width:850px){
   #sidebar{display:none;position:fixed;left:0;top:52px;bottom:60px;z-index:50;width:260px;box-shadow:4px 0 20px rgba(0,0,0,.6);}
   #sidebar.open{display:flex;}
-  #mob-btn{display:flex;align-items:center;}
   #sidebar-overlay{display:none;position:fixed;inset:0;z-index:49;background:rgba(0,0,0,.5);}
   #sidebar-overlay.open{display:block;}
   #fab-add{display:none;}
-  /* dolna nawigacja */
-  #bottom-nav{display:flex;}
-  #app{padding-bottom:60px;}
-  /* ukryj górne taby na mobile — zastąpione dolną nawigacją */
-  .nav-tabs{display:none;}
-  #mob-btn{display:none;}
-  /* stat strip mniejszy */
+  #bottom-nav{display:flex !important;}
+  #app{padding-bottom:env(safe-area-inset-bottom,0px);}
+  .app-mobile #app{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px));}
+  .nav-tabs{display:none !important;}
   .stat-strip{gap:8px;}
   .stat-num{font-size:14px;}
   .stat-lbl{font-size:8px;}
 }
 @media(min-width:851px){
   #fab-add{display:none;}
-  #bottom-nav{display:none;}
+  #bottom-nav{display:none !important;}
 }
 /* BOTTOM NAV */
-#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
+#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;padding:0;transition:color .15s;border-top:2px solid transparent;}
 .bnav-btn.active{color:var(--accent);border-top-color:var(--accent);}
 .bnav-btn .bnav-icon{font-size:20px;line-height:1;}
@@ -2229,10 +2225,16 @@ initSidebarLists();
 checkLogin();
 renderAll();
 initFirebase();
-// Ustaw stan mob-btn na starcie
+// Wykryj mobile i ustaw klasy
 (function(){
-  const mb=document.getElementById('mob-btn');
-  if(mb&&window.innerWidth<=850) mb.style.display='flex';
+  const isMobile = window.innerWidth <= 850 || 
+    window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+  if(isMobile){
+    document.body.classList.add('app-mobile');
+    const mb=document.getElementById('mob-btn');
+    if(mb) mb.style.display='flex';
+  }
 })();
 </script>
 <script>
