@@ -346,6 +346,10 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
       <button class="chip status-wolny on" data-f="status" data-v="wolny"  onclick="toggleChip(this)">Wolny mag.</button>
       <button class="chip status-sold on"  data-f="status" data-v="sold"   onclick="toggleChip(this)">Sprzedane</button>
     </div></div>
+    <div class="sb-section"><h5>Kategoria</h5>
+      <select id="filt-kategoria" onchange="onKatChange(this.value)" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+        <option value="">Wszystkie</option>
+      </select></div>
     <div class="sb-section"><h5>Produkt</h5>
       <select id="filt-produkt" onchange="applyFilters()"><option value="">Wszystkie</option></select></div>
     <div class="sb-section"><h5>Marka</h5>
@@ -354,10 +358,6 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
       <select id="filt-rozmiar" onchange="applyFilters()"><option value="">Wszystkie</option></select></div>
     <div class="sb-section"><h5>Kolor</h5>
       <select id="filt-kolor" onchange="applyFilters()"><option value="">Wszystkie</option></select></div>
-    <div class="sb-section"><h5>Kategoria</h5>
-      <select id="filt-kategoria" onchange="applyFilters()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
-        <option value="">Wszystkie</option>
-      </select></div>
     <div class="sb-section"><h5>Konto</h5>
       <div class="sb-chips" id="filt-konta"></div></div>
     <div class="sb-section">
@@ -874,6 +874,18 @@ function renderStats(){
   document.getElementById('sn-sold').textContent=state.items.filter(i=>getStatus(i)==='sold').length;
 }
 
+function onKatChange(katId){
+  // Filtruj produkty w selekcje do wybranej kategorii
+  const prodSel=document.getElementById('filt-produkt');
+  if(prodSel){
+    const prods=katId ? ALL_PRODUCTS.filter(p=>getKatId(p)===katId) : ALL_PRODUCTS;
+    const curVal=prodSel.value;
+    prodSel.innerHTML='<option value="">Wszystkie</option>'+prods.map(p=>`<option value="${p}"${curVal===p?' selected':''}>${p}</option>`).join('');
+    // jeśli poprzednio wybrany produkt nie należy do nowej kategorii — reset
+    if(katId && curVal && getKatId(curVal)!==katId) prodSel.value='';
+  }
+  applyFilters();
+}
 function initSidebarLists(){
   function fillSel(id,opts){const s=document.getElementById(id);s.innerHTML='<option value="">Wszystkie</option>';opts.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;s.appendChild(o);});}
   fillSel('filt-produkt',ALL_PRODUCTS);
