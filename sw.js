@@ -1,5 +1,5 @@
-const CACHE = 'fabest-v5';
-const ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.svg', '/icon-512.svg'];
+const CACHE = 'fabest-v6';
+const ASSETS = ['/fabest/', '/fabest/index.html', '/fabest/manifest.json', '/fabest/icon-192.svg', '/fabest/icon-512.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

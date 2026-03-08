@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>FABEST — Magazyn</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="/fabest/manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -45,7 +45,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .si-green .stat-num{color:var(--green-bright);}.si-yellow .stat-num{color:var(--accent);}.si-gold .stat-num{color:var(--gold);}
 #mob-btn{display:none;background:none;border:none;color:var(--text);font-size:20px;padding:0 12px;cursor:pointer;}
 
-#body{display:flex;flex:1;overflow:hidden;}
+#body{display:flex;flex:1;overflow:hidden;}#fullpage-wrap{display:contents;}
 
 /* SIDEBAR */
 #sidebar{width:215px;min-width:215px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:9px;}
@@ -339,30 +339,70 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
       </div>
       <div class="empty" id="empty-state" style="display:none"><p>Brak wyników — zmień filtry</p></div>
     </div>
-    <div id="page-analizy" style="display:none">
+
+  </main>
+</div>
+<div id="fullpage-wrap" style="display:none;flex:1;overflow:auto;padding:16px 20px;">
+  <div id="page-analizy" style="display:none">
       <div class="sec-hdr"><h2>Analizy — działalność nierejestrowana</h2></div>
       <div class="period-tabs" id="period-tabs"></div>
       <div class="firma-box" id="firma-box"></div>
       <div class="analizy-grid" id="analizy-grid"></div>
       <div class="firma-box" id="best-sellers" style="margin-top:14px"></div>
     </div>
-    <div id="page-settings" style="display:none">
+  <div id="page-settings" style="display:none">
       <div class="sec-hdr"><h2>⚙ Ustawienia</h2></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start">
-        <div class="settings-section"><h3>Konta sprzedaży</h3><div id="konta-list"></div>
-          <div class="add-row"><input type="text" id="inp-konto" placeholder="Nowe konto…"><button class="btn btn-primary" onclick="addKonto()">+ Dodaj</button></div></div>
-        <div class="settings-section"><h3>Magazyny (osoby)</h3><div id="mag-list"></div>
-          <div class="add-row"><input type="text" id="inp-mag" placeholder="Nowy magazyn…"><button class="btn btn-primary" onclick="addMag()">+ Dodaj</button></div></div>
+
+      <!-- GÓRNY RZĄD: Kategorie + Produkty/Marki/Kolory/Rozmiary -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-bottom:16px">
+        <!-- lewa: Kategorie -->
         <div class="settings-section"><h3>Kategorie produktów</h3><div id="kat-list"></div>
-          <div class="add-row" style="display:grid;grid-template-columns:32px 1fr auto;gap:4px">
-            <input type="text" id="inp-kat-icon" placeholder="🎁" style="text-align:center;font-size:14px">
-            <input type="text" id="inp-kat-nazwa" placeholder="Nowa kategoria…">
+          <div class="add-row" style="display:grid;grid-template-columns:36px 1fr auto;gap:4px;margin-top:8px">
+            <input type="text" id="inp-kat-icon" placeholder="🎁" style="text-align:center;font-size:16px;padding:4px">
+            <input type="text" id="inp-kat-nazwa" placeholder="Nazwa nowej kategorii…">
             <button class="btn btn-primary" onclick="addKat()">+ Dodaj</button>
           </div>
         </div>
+        <!-- prawa: Produkty + Marki + Kolory + Rozmiary w gridzie 2x2 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+          <div class="settings-section"><h3>Nazwy produktów</h3><div id="prod-list" style="max-height:220px;overflow-y:auto"></div>
+            <div class="add-row" style="display:grid;grid-template-columns:1fr auto;gap:4px;margin-top:8px">
+              <input type="text" id="inp-prod-nazwa" placeholder="Nowy produkt…">
+              <button class="btn btn-primary" onclick="addProd()">+ Dodaj</button>
+            </div>
+          </div>
+          <div class="settings-section"><h3>Marki</h3><div id="marki-list" style="max-height:220px;overflow-y:auto"></div>
+            <div class="add-row" style="display:grid;grid-template-columns:1fr auto;gap:4px;margin-top:8px">
+              <input type="text" id="inp-marka-nazwa" placeholder="Nowa marka…">
+              <button class="btn btn-primary" onclick="addMarka()">+ Dodaj</button>
+            </div>
+          </div>
+          <div class="settings-section"><h3>Kolory</h3><div id="kolory-list" style="max-height:220px;overflow-y:auto"></div>
+            <div class="add-row" style="display:grid;grid-template-columns:1fr auto;gap:4px;margin-top:8px">
+              <input type="text" id="inp-kolor-nazwa" placeholder="Nowy kolor…">
+              <button class="btn btn-primary" onclick="addKolor()">+ Dodaj</button>
+            </div>
+          </div>
+          <div class="settings-section"><h3>Rozmiary</h3><div id="rozmiary-list" style="max-height:220px;overflow-y:auto"></div>
+            <div class="add-row" style="display:grid;grid-template-columns:1fr auto;gap:4px;margin-top:8px">
+              <input type="text" id="inp-rozmiar-nazwa" placeholder="Nowy rozmiar…">
+              <button class="btn btn-primary" onclick="addRozmiar()">+ Dodaj</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOLNY RZĄD: Konta + Magazyny -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+        <div class="settings-section"><h3>Konta sprzedaży</h3><div id="konta-list"></div>
+          <div class="add-row"><input type="text" id="inp-konto" placeholder="Nowe konto…"><button class="btn btn-primary" onclick="addKonto()">+ Dodaj</button></div>
+        </div>
+        <div class="settings-section"><h3>Magazyny (osoby)</h3><div id="mag-list"></div>
+          <div class="add-row"><input type="text" id="inp-mag" placeholder="Nowy magazyn…"><button class="btn btn-primary" onclick="addMag()">+ Dodaj</button></div>
+        </div>
       </div>
     </div>
-    <div id="page-historia" style="display:none">
+  <div id="page-historia" style="display:none">
       <div class="sec-hdr"><h2>Historia zmian</h2><span class="sec-meta" id="hist-count"></span></div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
         <select id="hist-filter-typ" onchange="renderHistoria()" style="background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">
@@ -382,9 +422,8 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
       </div>
       <div id="hist-list"></div>
     </div>
-  </main>
 </div>
-</div>
+</div><!-- #app -->
 <div id="overlay" onclick="bgClose(event)"><div id="modal"><button class="modal-close" onclick="closeModal()">✕</button><div id="modal-body"></div></div></div>
 <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(event)">
 <div id="toast"></div>
@@ -447,31 +486,44 @@ const DEF_KONTA=["Targzon","Martzon","Szaryvin","Lidartag","Tees","Prawie","OLX"
 const DEF_MAG=["Lidartag","Martzon","Prawie","Szaryvin","Targzone","Tees"];
 const DEF_KOLORY=["beżowy", "biały", "bordowy", "brązowy", "burgundowy", "czarny", "czerwony", "ecru", "fioletowy", "granatowy", "khaki", "kolorowy", "krata", "kremowy", "limonka", "miedziany", "miętowy", "musztardowy", "niebieski", "pomarańczowy", "purpurowy", "róż pudrowy", "różowy", "srebrny", "szary", "turkus", "wielobarwne", "zielony", "złoty", "łososiowy", "żółty"];
 const DEF_ROZMIARY=["12", "16", "18", "27", "32", "32/33", "32/34", "34", "34.5", "34/30", "35", "35.5", "36", "37", "37.5", "38", "39.5", "3XL", "40", "41", "42", "44 / 45", "45", "46", "47/48", "49/50", "4XL", "50", "54", "58", "5XL", "8XL", "L", "L/XL", "M", "S", "XL", "XS", "XXL", "XXS"];
-const ALL_PRODUCTS=["Bezrękawnik kurtkowy","Bezrękawnik sweterkowy","Bluza","Bluza kangurka","Bluza rozpinana","Bluzka","Buty","Dres komplet","Garnitur","Golf","Gniazdko","Gra planszowa","Krawat","Kurtka","Kurtka ocieplana","Kurtka ortalionowa","Kurtka pikowana","Kurtka polarowa","Kurtka skórzana","Kurtka wiatrówka","Kurtka wiosenna","Kurtka zimowa","Leginsy","Marynarka","Obrus","Plecak","Polar","Polar rozpinany","Polo","Polo longsleeve","Piżama","Pościel","Płaszcz","Spodnie","Spinki do koszuli","Spodenki","Spodnie dresowe","Spódnica","Sukienka","Sweter","T-shirt","T-shirt longsleeve","Torebka","Koszula długi rękaw gładka","Koszula długi rękaw w kratę","Koszula długi rękaw w paski","Koszula długi rękaw wzór","Koszula krótki rękaw gładka","Koszula krótki rękaw w kratę","Koszula krótki rękaw w paski","Koszula krótki rękaw w pasy","Żakiet"];
-const ALL_MARKI=["346", "ARC'TERYX", "Acne Studios", "Adidas", "Alpha Industries", "Amiri", "Angelo Litrico", "Anty Social Social Club", "Armani", "Art of Footbal", "Ashina active", "BALDESSARINI", "BARBOUR", "BAUMLER", "BERSHKA", "BIG STAR", "BLEND", "BRGANS", "BUNTMAGER ADSBOL", "Ben Sherman", "Boss Hugo", "Burrbery", "Bytom", "C&A", "CAMO", "COLUMBIA", "COOL CLUB", "COOL!", "CORTEZ", "CP Company", "California Republic", "Calvin Klein", "Canada Goose", "Carmel", "Carsize", "Castore", "Champion", "Cotton WORLD®", "DOMYOS", "DSQUARED2", "Dickies", "Diesel", "Difuzed", "Disney", "Distrikt Norrebro", "Diverse", "Dolce&Gabana", "ENGELBERT STRAUSS", "EdHardy", "England", "Ewtex", "FILA", "FJALLRAVEN", "Fred Perry", "Fynch🌴Hatton", "GANNI", "GANT", "GAP", "GIACOMO CONTI", "GUESS", "George", "Gerry Weber", "Gucci", "H&M", "HAUSE", "Haagensen", "Haglöfs", "Haines&Bonner", "Hard Rock Cafe", "Harry Potter", "HawesCurtis", "Helly Hansen", "Henri Couchet", "Henri Lloyd", "Hoodrich", "I Love Life", "IN Extenso", "Independent", "Iriedaily", "JAGUAR 🐆", "JIEPOTU", "Jack&Jones", "Jedeka", "Juicycouture", "KENZO", "Kani Karl", "Kappa", "LAVIINO", "LIVERGY", "LIYOU", "La Mania", "LaMiar", "Lacoste", "Lasocki", "Levi's", "Luin", "Luis Vuitton", "Lyle&Scott", "MAN", "MUSTANG®", "Marie Phlillipe", "Mckenzie", "Michael Kors", "Monkler®", "Morgan", "Morley", "NFL", "NIEZNANY", "NapaPijri", "New Balance", "NewColection", "Nike", "Norr⌀na", "ORLEBAR BROWN", "Oakley", "Oskar", "PAL ZILERI", "PIER*ONE", "PRADA", "PRE🏇END", "Paul&Shark", "Paul's Boutique", "PeakPerformance", "Pedro del Hierro", "Pink Black", "Playerlayer", "PrettyGreen", "Puma", "RELCO🇵🇱", "Ralph Lauren", "Reclaimed Vintage", "Reebok", "River Island", "Russe", "SAMSOE ⏀SAMSOE", "SBLVL", "STORMBERG", "Salomon", "Shine Oryginal", "Skechers", "Societysport", "Stone Island®", "Sunset Suits", "THE NORTH FACE", "The Couture Club", "The Shirts Bar", "The Still", "Thomas Burrbery", "Timberland", "Tommy Hilfiger", "Tovta", "Trapstar", "U.S. POLO ASSN", "UGG", "UMBRO", "UNIQLO", "Under Armour", "VICCINI", "VIYELLA", "Van Vaal Fashion", "Vans", "Versace", "Victoria's Secret", "Weekend Offender", "Willsoor", "Woolovers", "Wrangler", "ZARA", "ZERO", "Zavetti Alessandro", "asics", "bpc selection", "carhartt", "mayoral", "mmer", "nelli blu", "szafraniec"];
+const DEF_PRODUCTS=["Bezrękawnik kurtkowy","Bezrękawnik sweterkowy","Bluza","Bluza kangurka","Bluza rozpinana","Bluzka","Buty","Dres komplet","Garnitur","Golf","Gniazdko","Gra planszowa","Krawat","Kurtka","Kurtka ocieplana","Kurtka ortalionowa","Kurtka pikowana","Kurtka polarowa","Kurtka skórzana","Kurtka wiatrówka","Kurtka wiosenna","Kurtka zimowa","Leginsy","Marynarka","Obrus","Plecak","Polar","Polar rozpinany","Polo","Polo longsleeve","Piżama","Pościel","Płaszcz","Spodnie","Spinki do koszuli","Spodenki","Spodnie dresowe","Spódnica","Sukienka","Sweter","T-shirt","T-shirt longsleeve","Torebka","Koszula długi rękaw gładka","Koszula długi rękaw w kratę","Koszula długi rękaw w paski","Koszula długi rękaw wzór","Koszula krótki rękaw gładka","Koszula krótki rękaw w kratę","Koszula krótki rękaw w paski","Koszula krótki rękaw w pasy","Żakiet"];
+const DEF_MARKI=["346", "ARC'TERYX", "Acne Studios", "Adidas", "Alpha Industries", "Amiri", "Angelo Litrico", "Anty Social Social Club", "Armani", "Art of Footbal", "Ashina active", "BALDESSARINI", "BARBOUR", "BAUMLER", "BERSHKA", "BIG STAR", "BLEND", "BRGANS", "BUNTMAGER ADSBOL", "Ben Sherman", "Boss Hugo", "Burrbery", "Bytom", "C&A", "CAMO", "COLUMBIA", "COOL CLUB", "COOL!", "CORTEZ", "CP Company", "California Republic", "Calvin Klein", "Canada Goose", "Carmel", "Carsize", "Castore", "Champion", "Cotton WORLD®", "DOMYOS", "DSQUARED2", "Dickies", "Diesel", "Difuzed", "Disney", "Distrikt Norrebro", "Diverse", "Dolce&Gabana", "ENGELBERT STRAUSS", "EdHardy", "England", "Ewtex", "FILA", "FJALLRAVEN", "Fred Perry", "Fynch🌴Hatton", "GANNI", "GANT", "GAP", "GIACOMO CONTI", "GUESS", "George", "Gerry Weber", "Gucci", "H&M", "HAUSE", "Haagensen", "Haglöfs", "Haines&Bonner", "Hard Rock Cafe", "Harry Potter", "HawesCurtis", "Helly Hansen", "Henri Couchet", "Henri Lloyd", "Hoodrich", "I Love Life", "IN Extenso", "Independent", "Iriedaily", "JAGUAR 🐆", "JIEPOTU", "Jack&Jones", "Jedeka", "Juicycouture", "KENZO", "Kani Karl", "Kappa", "LAVIINO", "LIVERGY", "LIYOU", "La Mania", "LaMiar", "Lacoste", "Lasocki", "Levi's", "Luin", "Luis Vuitton", "Lyle&Scott", "MAN", "MUSTANG®", "Marie Phlillipe", "Mckenzie", "Michael Kors", "Monkler®", "Morgan", "Morley", "NFL", "NIEZNANY", "NapaPijri", "New Balance", "NewColection", "Nike", "Norr⌀na", "ORLEBAR BROWN", "Oakley", "Oskar", "PAL ZILERI", "PIER*ONE", "PRADA", "PRE🏇END", "Paul&Shark", "Paul's Boutique", "PeakPerformance", "Pedro del Hierro", "Pink Black", "Playerlayer", "PrettyGreen", "Puma", "RELCO🇵🇱", "Ralph Lauren", "Reclaimed Vintage", "Reebok", "River Island", "Russe", "SAMSOE ⏀SAMSOE", "SBLVL", "STORMBERG", "Salomon", "Shine Oryginal", "Skechers", "Societysport", "Stone Island®", "Sunset Suits", "THE NORTH FACE", "The Couture Club", "The Shirts Bar", "The Still", "Thomas Burrbery", "Timberland", "Tommy Hilfiger", "Tovta", "Trapstar", "U.S. POLO ASSN", "UGG", "UMBRO", "UNIQLO", "Under Armour", "VICCINI", "VIYELLA", "Van Vaal Fashion", "Vans", "Versace", "Victoria's Secret", "Weekend Offender", "Willsoor", "Woolovers", "Wrangler", "ZARA", "ZERO", "Zavetti Alessandro", "asics", "bpc selection", "carhartt", "mayoral", "mmer", "nelli blu", "szafraniec"];
 
 // ============================================================
 // KATEGORIE PRODUKTÓW
 // ============================================================
 const KATEGORIE = [
+  {id:'akcesoria',    icon:'🎀', nazwa:'Akcesoria'},
+  {id:'agd',          icon:'☕', nazwa:'AGD'},
+  {id:'bluzy',        icon:'👟', nazwa:'Bluzy'},
+  {id:'buty',         icon:'🥿', nazwa:'Buty'},
+  {id:'dom',          icon:'🏠', nazwa:'Dom / Tekstylia'},
+  {id:'elektronika',  icon:'📱', nazwa:'Elektronika'},
+  {id:'komplety',     icon:'🕴️', nazwa:'Komplety'},
   {id:'koszule',      icon:'👔', nazwa:'Koszule'},
+  {id:'tshirty',      icon:'👕', nazwa:'Koszulki'},
+  {id:'ksiazki',      icon:'📚', nazwa:'Książki'},
   {id:'kurtki',       icon:'🧥', nazwa:'Kurtki'},
   {id:'marynarki',    icon:'🤵', nazwa:'Marynarki / Garnitury'},
-  {id:'swetry',       icon:'🧤', nazwa:'Swetry'},
-  {id:'bluzy',        icon:'👟', nazwa:'Bluzy'},
-  {id:'tshirty',      icon:'👕', nazwa:'T-shirty / Polo'},
   {id:'spodnie',      icon:'👖', nazwa:'Spodnie'},
   {id:'sukienki',     icon:'👗', nazwa:'Sukienki / Spódnice'},
-  {id:'buty',         icon:'🥿', nazwa:'Buty'},
+  {id:'swetry',       icon:'🧤', nazwa:'Swetry'},
   {id:'torby',        icon:'👜', nazwa:'Torby / Plecaki'},
-  {id:'komplety',     icon:'🕴️', nazwa:'Komplety'},
-  {id:'akcesoria',    icon:'🎀', nazwa:'Akcesoria'},
-  {id:'dom',          icon:'🏠', nazwa:'Dom / Tekstylia'},
-  {id:'agd',          icon:'☕', nazwa:'AGD'},
-  {id:'elektronika',  icon:'📱', nazwa:'Elektronika'},
-  {id:'ksiazki',      icon:'📚', nazwa:'Książki'},
   {id:'inne',         icon:'🎲', nazwa:'Inne'},
 ];
+
+// Dynamiczne listy — po załadowaniu state zastąpią DEF_*
+let ALL_PRODUCTS = [...DEF_PRODUCTS];
+let ALL_MARKI    = [...DEF_MARKI];
+function syncListsFromState(){
+  // migrate old state that didn't have products/marki
+  if(!state.products || !state.products.length) state.products=[...DEF_PRODUCTS];
+  if(!state.marki    || !state.marki.length)    state.marki   =[...DEF_MARKI];
+  if(!state.katMap)  state.katMap={};
+  if(!state.kategorie) state.kategorie=[];
+  ALL_PRODUCTS = state.products;
+  ALL_MARKI    = state.marki;
+}
 
 const AUTO_KAT = {
   // Koszule
@@ -524,6 +576,7 @@ const AUTO_KAT = {
 
 function getKatId(produkt){
   if(!produkt) return 'inne';
+  if(state.katMap && state.katMap[produkt]) return state.katMap[produkt];
   return AUTO_KAT[produkt] || AUTO_KAT[produkt.toLowerCase()] || 'inne';
 }
 function getKat(produkt){
@@ -567,25 +620,51 @@ async function initFirebase() {
 async function syncFromFirebase() {
   if (!firebaseReady) return;
   try {
+    // Jednorazowy fetch przy starcie
     const snap = await _fsGetDoc(_fsDoc(db, "fabest", "state"));
     if (snap.exists()) {
       const remote = snap.data();
-      // Użyj danych z Firebase jeśli są nowsze lub lokalne puste
       const localRaw = localStorage.getItem("fabest_v7");
       const local = localRaw ? JSON.parse(localRaw) : null;
       const remoteTs = remote._ts || 0;
       const localTs = local?._ts || 0;
       if (remoteTs >= localTs) {
-        state = remote;
-        migrateMagNames();
-migrateProductNames();
-        filt = {status: new Set(["active","wolny","sold"]), konta: new Set()};
-        localStorage.setItem("fabest_v7", JSON.stringify(state));
-        renderAll();
+        applyRemoteState(remote);
         toast("☁ Dane zsynchronizowane z chmury");
       }
     }
+    // Real-time listener — aktualizuje gdy drugi telefon coś zmieni
+    const { onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    onSnapshot(_fsDoc(db, "fabest", "state"), (snap) => {
+      if (!snap.exists()) return;
+      const remote = snap.data();
+      const remoteTs = remote._ts || 0;
+      const localTs = state._ts || 0;
+      // Aktualizuj tylko jeśli zmiana pochodzi z innego urządzenia (nowsza o >2s)
+      if (remoteTs > localTs + 2000) {
+        applyRemoteState(remote);
+        toast("🔄 Dane zaktualizowane przez drugiego użytkownika");
+      }
+    });
   } catch(e) { console.warn("Firebase sync error", e); }
+}
+
+function applyRemoteState(remote) {
+  state = remote;
+  // Upewnij się że wszystkie wymagane pola istnieją
+  if (!state.katMap)    state.katMap = {};
+  if (!state.kategorie) state.kategorie = [];
+  if (!state.products)  state.products = [...DEF_PRODUCTS];
+  if (!state.marki)     state.marki = [...DEF_MARKI];
+  if (!state.kolory)    state.kolory = [...DEF_KOLORY];
+  if (!state.rozmiary)  state.rozmiary = [...DEF_ROZMIARY];
+  migrateMagNames();
+  migrateProductNames();
+  filt = {status: new Set(["active","wolny","sold"]), konta: new Set()};
+  localStorage.setItem("fabest_v7", JSON.stringify(state));
+  syncListsFromState();
+  initSidebarLists();
+  renderAll();
 }
 
 const MAG_RENAME={'Tees&Shirt':'Tees','Tees&shirt':'Tees','Prawie18':'Prawie','Martzone1':'Martzon','Martzone':'Martzon'};
@@ -620,7 +699,7 @@ function loadState(){
   ["fabest_v5","fabest_v6"].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
   try{const r=localStorage.getItem("fabest_v7");if(r)return JSON.parse(r);}catch(e){}
   const items=SEED.map(i=>({...i,konta:(i.konta||[]).filter(k=>!["Grailed","Etsy","e-Buy"].includes(k)),foto:null}));
-  return{items,konta:DEF_KONTA,magazyny:DEF_MAG,kolory:[...DEF_KOLORY],rozmiary:[...DEF_ROZMIARY],nextId:Math.max(...SEED.map(i=>i.id))+1};
+  return{items,konta:DEF_KONTA,magazyny:DEF_MAG,kolory:[...DEF_KOLORY],rozmiary:[...DEF_ROZMIARY],products:[...DEF_PRODUCTS],marki:[...DEF_MARKI],nextId:Math.max(...SEED.map(i=>i.id))+1,katMap:{},kategorie:[]};
 }
 
 let _saveTimeout = null;
@@ -640,6 +719,7 @@ function save() {
 }
 
 let state=loadState();
+syncListsFromState();
 migrateMagNames();
 let filt={status:new Set(['active','wolny','sold']),konta:new Set()};
 // === OKRES FILTER STATE ===
@@ -705,7 +785,7 @@ function initSidebarLists(){
 const SORT_COLS=[
   {id:'ref',label:'Ref (data)'},{id:'produkt',label:'Produkt'},{id:'marka',label:'Marka'},
   {id:'rozmiar',label:'Rozmiar'},{id:'szczegoly',label:'Szczegóły'},{id:'kolor',label:'Kolor'},
-  {id:'datasprzed',label:'Data sprzedaży'},
+  {id:'datasprzed',label:'Data sprzedaży'},{id:'kategoria',label:'Kategoria'},
 ];
 function renderSortPills(){
   document.getElementById('sort-pills').innerHTML=SORT_COLS.map(c=>
@@ -745,38 +825,96 @@ function setOkresVal(v){
   applyFilters();
 }
 
+function yday(){const d=new Date();d.setDate(d.getDate()-1);return d.toISOString().slice(0,10);}
+
 function renderOkresVals(){
   const wrap=document.getElementById('okres-vals-wrap');
   const container=document.getElementById('okres-vals');
   if(!wrap||!container)return;
-  if(okresTyp==='all'||okresTyp==='day'||okresTyp==='week'){
-    wrap.style.display='none';
+
+  if(okresTyp==='all'){wrap.style.display='none';return;}
+  wrap.style.display='block';
+
+  // --- DZIEN: kalendarz ---
+  if(okresTyp==='day'){
+    const todayStr=new Date().toISOString().slice(0,10);
+    const cur=okresVal||todayStr;
+    if(!okresVal){okresVal=todayStr;setTimeout(()=>{applyFilters();updateOkresLabel();},0);}
+    container.innerHTML=`
+      <input type="date" id="day-picker" value="${cur}"
+        style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:8px;padding:6px 8px;font-size:12px;margin-bottom:4px;box-sizing:border-box"
+        onchange="setOkresVal(this.value)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+        <button class="chip${cur===todayStr?' on':''}" style="font-size:10px;padding:4px" onclick="setOkresVal('${todayStr}')">Dziś</button>
+        <button class="chip${cur===yday()?' on':''}" style="font-size:10px;padding:4px" onclick="setOkresVal('${yday()}')">Wczoraj</button>
+      </div>`;
     return;
   }
-  // collect available values from items
-  const dateKey = okresSource==='sprzedaz' ? 'dataSprzedazy' : 'dataZakupu';
-  const vals=new Set();
-  state.items.forEach(i=>{
-    const raw=i[dateKey];
-    if(!raw)return;
-    const d=new Date(raw); if(isNaN(d))return;
-    const y=d.getFullYear(), m=d.getMonth();
-    if(okresTyp==='month')    vals.add(y+'-'+String(m+1).padStart(2,'0'));
-    else if(okresTyp==='quarter') vals.add(y+'-Q'+(Math.floor(m/3)+1));
-    else if(okresTyp==='year')    vals.add(''+y);
-  });
-  const sorted=[...vals].sort().reverse();
 
-  function valLabel(v){
-    if(okresTyp==='month'){const[y,mn]=v.split('-');return MNAMES_FULL[parseInt(mn)-1]+' '+y;}
-    if(okresTyp==='quarter'){const[y,q]=v.split('-');return q+' '+y;}
-    return v;
+  // --- TYDZIEN: przyciski ---
+  if(okresTyp==='week'){
+    if(!okresVal) {okresVal='week-0';setTimeout(()=>{applyFilters();updateOkresLabel();},0);}
+    const weeks=[
+      {label:'🗓 Ten tydzień',    val:'week-0'},
+      {label:'⬅ Zeszły tydzień', val:'week-1'},
+      {label:'⏮ 2 tygodnie temu',val:'week-2'},
+    ];
+    container.innerHTML=weeks.map(w=>
+      `<button class="chip${okresVal===w.val?' on':''}" style="margin-bottom:3px;width:100%;text-align:left;font-size:10px;padding:5px 8px" onclick="setOkresVal('${w.val}')">${w.label}</button>`
+    ).join('');
+    return;
   }
 
-  wrap.style.display='block';
-  container.innerHTML=sorted.length===0
-    ? '<div style="font-size:10px;color:var(--text3)">Brak danych</div>'
-    : sorted.map(v=>`<button class="chip${okresVal===v?' on':''}" style="margin-bottom:3px;width:100%;text-align:left;font-size:10px" onclick="setOkresVal('${v}')">${valLabel(v)}</button>`).join('');
+  // --- MIESIAC / KWARTAL / ROK ---
+  const dateKey=okresSource==='sprzedaz'?'dataSprzedazy':'dataZakupu';
+  // Zbierz lata z danych (oba źródła żeby nie zgubić lat)
+  const years=new Set();
+  state.items.forEach(i=>{
+    ['dataZakupu','dataSprzedazy'].forEach(k=>{
+      const raw=i[k];if(!raw)return;
+      const d=new Date(raw);if(!isNaN(d))years.add(d.getFullYear());
+    });
+  });
+  const sortedYears=[...years].sort().reverse();
+  if(sortedYears.length===0){container.innerHTML='<div style="font-size:10px;color:var(--text3)">Brak danych</div>';return;}
+
+  // Policz ile pozycji ma daną wartość (żeby pokazać licznik)
+  function countVal(v){
+    return state.items.filter(i=>{
+      const raw=i[dateKey];if(!raw)return false;
+      const d=new Date(raw);if(isNaN(d))return false;
+      const y=d.getFullYear(),m=d.getMonth();
+      if(okresTyp==='quarter') return v===y+'-Q'+(Math.floor(m/3)+1);
+      if(okresTyp==='month')   return v===y+'-'+String(m+1).padStart(2,'0');
+      if(okresTyp==='year')    return v===''+y;
+      return false;
+    }).length;
+  }
+
+  if(okresTyp==='quarter'){
+    container.innerHTML=sortedYears.map(y=>{
+      const btns=[1,2,3,4].map(q=>{
+        const v=y+'-Q'+q;
+        const cnt=countVal(v);
+        return`<button class="chip${okresVal===v?' on':''}" style="font-size:10px;padding:4px 6px;opacity:${cnt>0?1:0.4}" onclick="setOkresVal('${v}')">Q${q}<span style="font-size:9px;color:var(--text3);margin-left:2px">${cnt>0?'('+cnt+')':''}</span></button>`;
+      }).join('');
+      return`<div style="margin-bottom:6px"><div style="font-size:9px;color:var(--text3);margin-bottom:3px;font-weight:600">${y}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px">${btns}</div></div>`;
+    }).join('');
+  } else if(okresTyp==='month'){
+    container.innerHTML=sortedYears.map(y=>{
+      const btns=MNAMES_SHORT.map((mn,mi)=>{
+        const v=y+'-'+String(mi+1).padStart(2,'0');
+        const cnt=countVal(v);
+        return`<button class="chip${okresVal===v?' on':''}" style="font-size:9px;padding:3px 2px;opacity:${cnt>0?1:0.4}" onclick="setOkresVal('${v}')">${mn}</button>`;
+      }).join('');
+      return`<div style="margin-bottom:6px"><div style="font-size:9px;color:var(--text3);margin-bottom:3px;font-weight:600">${y}</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px">${btns}</div></div>`;
+    }).join('');
+  } else if(okresTyp==='year'){
+    container.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">`+sortedYears.map(y=>{
+      const cnt=countVal(''+y);
+      return`<button class="chip${okresVal===''+y?' on':''}" style="font-size:10px;padding:4px;opacity:${cnt>0?1:0.4}" onclick="setOkresVal('${y}')">${y}<span style="font-size:9px;color:var(--text3);margin-left:2px">${cnt>0?'('+cnt+')':''}</span></button>`;
+    }).join('')+'</div>';
+  }
 }
 
 function updateOkresLabel(){
@@ -785,8 +923,15 @@ function updateOkresLabel(){
   if(okresTyp==='all'){ lbl.style.display='none'; return; }
   let txt='';
   const src=okresSource==='sprzedaz'?'Sprzedaż':'Zakup';
-  if(okresTyp==='day') txt=`${src}: Dzisiaj`;
-  else if(okresTyp==='week') txt=`${src}: Ten tydzień`;
+  if(okresTyp==='day'){
+    const d=new Date(okresVal||new Date().toISOString().slice(0,10));
+    const todayStr=new Date().toISOString().slice(0,10);
+    txt=`${src}: `+(okresVal===todayStr?'Dziś':d.toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'}));
+  }
+  else if(okresTyp==='week'){
+    const labels={'week-0':'Ten tydzień','week-1':'Zeszły tydzień','week-2':'2 tygodnie temu'};
+    txt=`${src}: `+(labels[okresVal||'week-0']||'Tydzień');
+  }
   else if(okresVal){
     if(okresTyp==='month'){const[y,mn]=okresVal.split('-');txt=`${src}: ${MNAMES_FULL[parseInt(mn)-1]} ${y}`;}
     else if(okresTyp==='quarter'){const[y,q]=okresVal.split('-');txt=`${src}: ${q} ${y}`;}
@@ -812,13 +957,13 @@ function toggleChip(btn){
 
 // TABLE HEADER — 15 columns
 const TH=[
-  {l:'Ref',sk:'ref'},{l:'📷',sk:null},{l:'Kat.',sk:null},{l:'Produkt',sk:'produkt'},{l:'Marka',sk:'marka'},{l:'Rozm.',sk:'rozmiar'},
+  {l:'Ref',sk:'ref'},{l:'📷',sk:null},{l:'Kategoria',sk:'kategoria'},{l:'Produkt',sk:'produkt'},{l:'Marka',sk:'marka'},{l:'Rozm.',sk:'rozmiar'},
   {l:'Konta',sk:null},{l:'Kolor',sk:'kolor'},{l:'Kto sprzedał',sk:null},
   {l:'①cm',sk:'szerokosc'},{l:'②cm',sk:'dlugosc'},{l:'③cm',sk:'rekaw'},
   {l:'Zakup',sk:'zakup'},{l:'Startowa',sk:'start'},{l:'Sprzedaż',sk:'sprzed'},{l:'Zysk',sk:'zysk'},
   {l:'Data sprzed.',sk:'datasprzed'},
 ];
-const GT='68px 24px 28px minmax(110px,1.4fr) minmax(100px,1.1fr) 56px 130px 72px 88px 44px 44px 44px 74px 74px 74px 66px 82px';
+const GT='68px 24px minmax(90px,0.9fr) minmax(110px,1.4fr) minmax(100px,1.1fr) 56px 130px 72px 88px 44px 44px 44px 74px 74px 74px 66px 82px';
 const MW='1200px';
 const GSTYLE=`display:grid;grid-template-columns:${GT};min-width:${MW};`;
 
@@ -839,8 +984,8 @@ function applyFilters(){
     if(!raw) return false;
     const d=new Date(raw); d.setHours(0,0,0,0);
     if(isNaN(d)) return false;
-    if(okresTyp==='day') return d.getTime()===today.getTime();
-    if(okresTyp==='week'){const mon=new Date(today);mon.setDate(today.getDate()-(today.getDay()||7)+1);const sun=new Date(mon);sun.setDate(mon.getDate()+6);return d>=mon&&d<=sun;}
+    if(okresTyp==='day'){const sel=new Date(okresVal||today.toISOString().slice(0,10));sel.setHours(0,0,0,0);return d.getTime()===sel.getTime();}
+    if(okresTyp==='week'){const wk=parseInt((okresVal||'week-0').replace('week-',''));const mon=new Date(today);mon.setDate(today.getDate()-(today.getDay()||7)+1-wk*7);const sun=new Date(mon);sun.setDate(mon.getDate()+6);return d>=mon&&d<=sun;}
     if(!okresVal) return true;
     const y=d.getFullYear(),m=d.getMonth();
     if(okresTyp==='month')   return okresVal===y+'-'+String(m+1).padStart(2,'0');
@@ -884,6 +1029,7 @@ function applyFilters(){
       case 'sprzed':    va=a.cenaSprzedazy||0;vb=b.cenaSprzedazy||0;break;
       case 'zysk':      va=a.zysk||0;vb=b.zysk||0;break;
       case 'datasprzed':va=(a.dataSprzedazy||'');vb=(b.dataSprzedazy||'');break;
+      case 'kategoria':  va=getKat(a.produkt).nazwa.toLowerCase();vb=getKat(b.produkt).nazwa.toLowerCase();break;
       default:          va=ra;vb=rb;
     }
     return va<vb?-sortDir:va>vb?sortDir:0;
@@ -924,7 +1070,7 @@ function applyFilters(){
     return`<div class="tbl-row ${s}" onclick="openItem(${item.id})" style="${GSTYLE}">
       <div class="cell-ref" style="padding:0 3px">${ref}</div>
       <div style="display:flex;align-items:center;justify-content:center">${photoDot}</div>
-      <div style="display:flex;align-items:center;justify-content:center;font-size:13px" title="${kat.nazwa}">${kat.icon}</div>
+      <div style="display:flex;align-items:center;gap:4px;padding:0 3px;overflow:hidden" title="${kat.nazwa}"><span style="font-size:12px">${kat.icon}</span><span style="font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${kat.nazwa}</span></div>
       <div class="cell-name" style="padding:0 3px">${item.produkt||'—'}</div>
       <div class="cell-marka" style="padding:0 3px">${item.marka||'—'}</div>
       <div class="cell-rozm" style="padding:0 3px">${item.rozmiar||'—'}</div>
@@ -1423,15 +1569,16 @@ function openItem(id){
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px" id="right-col-edit">
-        <div><label>Produkt</label><div id="produkt-mgr"></div></div>
-        <div><label>Marka</label><div id="marka-mgr"></div></div>
-        <div><label>Kolor</label><div id="kolor-mgr"></div></div>
-        <div><label>Rozmiar producenta</label><div id="rozmiar-mgr"></div></div>
+        <div><label>Produkt</label>${simpleSelect('e-produkt',ALL_PRODUCTS,(item.produkt||'').trim())}</div>
+        <div><label>Marka</label>${simpleSelect('e-marka',ALL_MARKI,(item.marka||'').trim())}</div>
+        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,(item.kolor||'').trim())}</div>
+        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,(item.rozmiar||'').trim())}</div>
         <div><label>Kategoria</label>
           <select id="e-kategoria" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
-            ${KATEGORIE.map(k=>`<option value="${k.id}" ${(item.kategoria||getKatId(item.produkt))===k.id?'selected':''}>${k.icon} ${k.nazwa}</option>`).join('')}
+            ${[...KATEGORIE,...(state.kategorie||[])].map(k=>`<option value="${k.id}" ${(item.kategoria||getKatId(item.produkt))===k.id?'selected':''}>${k.icon} ${k.nazwa}</option>`).join('')}
           </select>
         </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">💡 Nowe produkty, marki i kolory dodasz w <b>⚙ Ustawienia</b></div>
       </div>
     </div>
     <div class="fsection"><div class="fsection-title">📐 Wymiary (cm)</div>
@@ -1460,10 +1607,6 @@ function openItem(id){
       <button class="btn btn-ghost" onclick="closeModal()">Anuluj</button>
     </div>`;
 
-  renderSelectManager('produkt-mgr',ALL_PRODUCTS,'products',(item.produkt||'').trim(),'e-produkt');
-  renderSelectManager('marka-mgr',ALL_MARKI,'marki',(item.marka||'').trim(),'e-marka');
-  renderSelectManager('kolor-mgr',state.kolory,'kolory',(item.kolor||'').trim(),'e-kolor');
-  renderSelectManager('rozmiar-mgr',state.rozmiary,'rozmiary',(item.rozmiar||'').trim(),'e-rozmiar');
   document.getElementById('overlay').classList.add('open');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     const rc=document.getElementById('right-col-edit');
@@ -1559,6 +1702,13 @@ function deleteItem(id){
 
 // ADD MODAL
 
+
+function simpleSelect(id, items, curVal){
+  return `<select id="${id}" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+    <option value="">— wybierz —</option>
+    ${items.map(v=>`<option ${curVal===v?'selected':''}>${v}</option>`).join('')}
+  </select>`;
+}
 function onKatChange(){}
 function autoDetectKat(){
   const prod=document.getElementById('e-produkt')?.value||'';
@@ -1575,6 +1725,7 @@ function openAddModal(){
     <div class="modal-title">+ Nowy towar</div>
     <div class="modal-sub">Uzupełnij dane zakupionego ubrania</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;align-items:start">
+      <!-- LEWA: zdjęcie + szczegóły -->
       <div style="display:flex;flex-direction:column;gap:8px">
         <div>
           <label>Zdjęcie produktu</label>
@@ -1584,24 +1735,28 @@ function openAddModal(){
             <button class="photo-remove" id="photo-remove-btn" style="display:none" onclick="event.stopPropagation();removePhoto()">✕</button>
           </div>
         </div>
-          <div><label>Szczegóły</label><input type="text" id="e-szczegoly" value="${item.szczegoly||''}" style="width:100%;box-sizing:border-box"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-            <div><label>Krój</label><input type="text" id="e-kroj" value="${item.kroj||''}"></div>
-            <div><label>Materiał</label><input type="text" id="e-material" value="${item.material||''}"></div>
-            <div><label>Uwagi / uszkodzenia</label><input type="text" id="e-uwagi" value="${item.uwagi||''}"></div>
-          </div>
-        </div>
       </div>
+      <!-- PRAWA: pola wyboru -->
       <div style="display:flex;flex-direction:column;gap:10px" id="right-col-add">
-        <div><label>Produkt *</label><div id="produkt-mgr"></div></div>
-        <div><label>Marka *</label><div id="marka-mgr"></div></div>
-        <div><label>Kolor</label><div id="kolor-mgr"></div></div>
-        <div><label>Rozmiar producenta</label><div id="rozmiar-mgr"></div></div>
+        <div><label>Produkt *</label>${simpleSelect('e-produkt',ALL_PRODUCTS,'')}</div>
+        <div><label>Marka *</label>${simpleSelect('e-marka',ALL_MARKI,'')}</div>
+        <div><label>Kolor</label>${simpleSelect('e-kolor',state.kolory,'')}</div>
+        <div><label>Rozmiar</label>${simpleSelect('e-rozmiar',state.rozmiary,'')}</div>
         <div><label>Kategoria</label>
-          <select id="e-kategoria" onchange="onKatChange()" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
+          <select id="e-kategoria" style="width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px">
             ${[...KATEGORIE,...(state.kategorie||[])].map(k=>`<option value="${k.id}">${k.icon} ${k.nazwa}</option>`).join('')}
           </select>
         </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">💡 Nowe produkty, marki i kolory dodasz w <b>⚙ Ustawienia</b></div>
+      </div>
+    </div>
+    <!-- Szczegóły + Krój/Materiał/Uwagi — pełna szerokość -->
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+      <div><label>Szczegóły</label><input type="text" id="e-szczegoly" value="" style="width:100%;box-sizing:border-box"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div><label>Krój</label><input type="text" id="e-kroj" value="" style="width:100%;box-sizing:border-box"></div>
+        <div><label>Materiał</label><input type="text" id="e-material" value="" style="width:100%;box-sizing:border-box"></div>
+        <div><label>Uwagi / uszkodzenia</label><input type="text" id="e-uwagi" value="" style="width:100%;box-sizing:border-box"></div>
       </div>
     </div>
     <div class="fsection"><div class="fsection-title">📐 Wymiary (cm)</div>
@@ -1625,12 +1780,7 @@ function openAddModal(){
       <button class="btn btn-primary" onclick="addItem()">➕ Dodaj towar</button>
       <button class="btn btn-ghost" onclick="closeModal()">Anuluj</button>
     </div>`;
-  renderSelectManager('produkt-mgr',ALL_PRODUCTS,'products','','e-produkt');
-  renderSelectManager('marka-mgr',ALL_MARKI,'marki','','e-marka');
-  renderSelectManager('kolor-mgr',state.kolory,'kolory','','e-kolor');
-  renderSelectManager('rozmiar-mgr',state.rozmiary,'rozmiary','','e-rozmiar');
   document.getElementById('overlay').classList.add('open');
-  // Sync photo height to right column after render
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     const rc=document.getElementById('right-col-add');
     const pw=document.getElementById('photo-wrap-main');
@@ -1664,26 +1814,242 @@ function addItem(){
 }
 
 // SETTINGS
+function rowEditHtml(id, currentVal, saveCallback, deleteCallback){
+  return`<div class="konto-row" id="row-${id}">
+    <span style="flex:1" id="row-val-${id}">${currentVal}</span>
+    <button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="startEdit('${id}','${currentVal.replace(/'/g,"\\'")}',${saveCallback},${deleteCallback})">✏</button>
+    <button class="btn btn-danger" style="padding:2px 7px;font-size:10px" onclick="(${deleteCallback})()">Usuń</button>
+  </div>`;
+}
+function startEdit(id, curVal, saveFn, delFn){
+  const row=document.getElementById('row-'+id);
+  if(!row)return;
+  row.innerHTML=`
+    <input type="text" value="${curVal}" id="edit-inp-${id}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:12px">
+    <button class="btn btn-primary" style="padding:2px 8px;font-size:10px" onclick="(${saveFn})(document.getElementById('edit-inp-${id}').value)">✓</button>
+    <button class="btn btn-ghost" style="padding:2px 8px;font-size:10px" onclick="renderSettings()">✕</button>`;
+}
+
+
+function toggleProdKat(katId, produkt, checked){
+  if(!state.katMap) state.katMap={};
+  if(checked){
+    state.katMap[produkt]=katId;
+  } else {
+    // przywróć do AUTO_KAT lub usuń z katMap
+    delete state.katMap[produkt];
+  }
+  save();
+  // odśwież licznik i styl checkboxa bez pełnego re-renderu
+  renderSettings();
+}
 function renderSettings(){
+  // Konta
   document.getElementById('konta-list').innerHTML=state.konta.map(k=>`
-    <div class="konto-row"><span>${k}</span>
+    <div class="konto-row" id="row-konto-${k}">
+      <span style="flex:1">${k}</span>
       <span class="owner-lbl">${OWNER_MAP[k]||''}</span>
-      <button class="btn btn-danger" style="padding:2px 8px;font-size:10px" onclick="delKonto('${k}')">Usuń</button></div>`).join('');
+      <button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="editKonto('${k}')">✏</button>
+      <button class="btn btn-danger" style="padding:2px 7px;font-size:10px" onclick="delKonto('${k}')">Usuń</button>
+    </div>`).join('');
+
+  // Magazyny
   document.getElementById('mag-list').innerHTML=state.magazyny.map(m=>`
-    <div class="konto-row"><span>${m}</span>
-      <button class="btn btn-danger" style="padding:2px 8px;font-size:10px" onclick="delMag('${m}')">Usuń</button></div>`).join('');
-  // Kategorie — custom ones stored in state.kategorie
+    <div class="konto-row" id="row-mag-${m}">
+      <span style="flex:1">${m}</span>
+      <button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="editMag('${m}')">✏</button>
+      <button class="btn btn-danger" style="padding:2px 7px;font-size:10px" onclick="delMag('${m}')">Usuń</button>
+    </div>`).join('');
+
+  // Kategorie — wszystkie edytowalne
   const allKat=[...KATEGORIE,...(state.kategorie||[])];
   const katEl=document.getElementById('kat-list');
-  if(katEl) katEl.innerHTML=allKat.map(k=>`
-    <div class="konto-row">
-      <span style="font-size:15px;width:22px">${k.icon}</span>
-      <span style="flex:1">${k.nazwa}</span>
-      ${k._custom?`<button class="btn btn-danger" style="padding:2px 8px;font-size:10px" onclick="delKat('${k.id}')">Usuń</button>`:`<span style="font-size:9px;color:var(--text3)">wbudowana</span>`}
+  if(katEl) katEl.innerHTML=allKat.map(k=>{
+    const prods=ALL_PRODUCTS.filter(p=>getKatId(p)===k.id);
+    const checks=ALL_PRODUCTS.map(p=>{
+      const on=getKatId(p)===k.id;
+      const safe=p.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      return`<label style="display:inline-flex;align-items:center;gap:3px;background:${on?'rgba(180,255,100,0.12)':'transparent'};border:1px solid ${on?'var(--accent)':'var(--border)'};border-radius:20px;padding:2px 8px 2px 5px;font-size:10px;color:${on?'var(--accent)':'var(--text3)'};margin:2px;cursor:pointer;white-space:nowrap;transition:all .15s"><input type="checkbox" ${on?'checked':''} style="accent-color:var(--accent);width:11px;height:11px;cursor:pointer;flex-shrink:0" onchange="toggleProdKat('${k.id}','${safe}',this.checked)">${p}</label>`;
+    }).join('');
+    return`<details style="border:1px solid var(--border);border-radius:7px;margin-bottom:4px;overflow:hidden" id="row-kat-${k.id}">
+      <summary style="display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;list-style:none;user-select:none" onclick="event.preventDefault();this.parentElement.open=!this.parentElement.open">
+        <span style="font-size:14px">${k.icon}</span>
+        <span style="flex:1;font-weight:600;font-size:12px">${k.nazwa}</span>
+        <span style="font-size:10px;color:${prods.length?'var(--accent)':'var(--text3)'};background:${prods.length?'rgba(180,255,100,0.1)':'var(--bg2)'};border-radius:10px;padding:1px 7px;margin-right:4px">${prods.length} prod.</span>
+        <button class="btn btn-ghost" style="padding:2px 6px;font-size:10px" onclick="event.stopPropagation();editKat('${k.id}')">✏</button>
+        <button class="btn btn-danger" style="padding:2px 6px;font-size:10px" onclick="event.stopPropagation();delKat('${k.id}')">${k._custom?'Usuń':'✕'}</button>
+        <span style="font-size:10px;color:var(--text3);margin-left:2px">▾</span>
+      </summary>
+      <div style="padding:6px 10px 10px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center">${checks}</div>
+    </details>`;
+  }).join('');
+
+  // Produkty
+  const prodEl=document.getElementById('prod-list');
+  if(prodEl) prodEl.innerHTML=ALL_PRODUCTS.map((p,idx)=>`
+    <div class="konto-row" id="row-prod-${idx}">
+      <span style="flex:1;font-size:11px">${p}</span>
+      <button class="btn btn-ghost" style="padding:2px 6px;font-size:10px" onclick="editProd(${idx})">✏</button>
+      <button class="btn btn-danger" style="padding:2px 6px;font-size:10px" onclick="delProd(${idx})">✕</button>
     </div>`).join('');
+  // Marki
+  const markiEl=document.getElementById('marki-list');
+  if(markiEl) markiEl.innerHTML=ALL_MARKI.map((m,idx)=>`
+    <div class="konto-row" id="row-marka-${idx}">
+      <span style="flex:1;font-size:11px">${m}</span>
+      <button class="btn btn-ghost" style="padding:2px 6px;font-size:10px" onclick="editMarka(${idx})">✏</button>
+      <button class="btn btn-danger" style="padding:2px 6px;font-size:10px" onclick="delMarka(${idx})">✕</button>
+    </div>`).join('');
+  // Kolory
+  const koloryEl=document.getElementById('kolory-list');
+  if(koloryEl) koloryEl.innerHTML=state.kolory.map((k,idx)=>`
+    <div class="konto-row" id="row-kolor-${idx}">
+      <span style="flex:1;font-size:11px">${k}</span>
+      <button class="btn btn-ghost" style="padding:2px 6px;font-size:10px" onclick="editKolor(${idx})">✏</button>
+      <button class="btn btn-danger" style="padding:2px 6px;font-size:10px" onclick="delKolor(${idx})">✕</button>
+    </div>`).join('');
+  // Rozmiary
+  const rozmEl=document.getElementById('rozmiary-list');
+  if(rozmEl) rozmEl.innerHTML=state.rozmiary.map((r,idx)=>`
+    <div class="konto-row" id="row-rozmiar-${idx}">
+      <span style="flex:1;font-size:11px">${r}</span>
+      <button class="btn btn-ghost" style="padding:2px 6px;font-size:10px" onclick="editRozmiar(${idx})">✏</button>
+      <button class="btn btn-danger" style="padding:2px 6px;font-size:10px" onclick="delRozmiar(${idx})">✕</button>
+    </div>`).join('');
+
   // Refresh kat select in sidebar
   const ks=document.getElementById('filt-kategoria');
   if(ks){ks.innerHTML='<option value="">Wszystkie</option>'+allKat.map(k=>`<option value="${k.id}">${k.icon} ${k.nazwa}</option>`).join('');}
+}
+
+// Edit helpers
+function editKonto(k){
+  const row=document.getElementById('row-konto-'+k);
+  if(!row)return;
+  row.innerHTML=`<input type="text" id="ei-konto" value="${k}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:12px">
+    <button class="btn btn-primary" style="padding:2px 8px;font-size:10px" onclick="saveEditKonto('${k}')">✓</button>
+    <button class="btn btn-ghost" style="padding:2px 8px;font-size:10px" onclick="renderSettings()">✕</button>`;
+}
+function saveEditKonto(old){
+  const v=document.getElementById('ei-konto').value.trim();
+  if(!v)return;
+  const idx=state.konta.indexOf(old);
+  if(idx>=0){state.konta[idx]=v;}
+  state.items.forEach(i=>{if(i.konta)i.konta=i.konta.map(c=>c===old?v:c);});
+  save();renderSettings();renderChips();toast('✅ Zmieniono: '+v);
+}
+function editMag(m){
+  const row=document.getElementById('row-mag-'+m);
+  if(!row)return;
+  row.innerHTML=`<input type="text" id="ei-mag" value="${m}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:12px">
+    <button class="btn btn-primary" style="padding:2px 8px;font-size:10px" onclick="saveEditMag('${m}')">✓</button>
+    <button class="btn btn-ghost" style="padding:2px 8px;font-size:10px" onclick="renderSettings()">✕</button>`;
+}
+function saveEditMag(old){
+  const v=document.getElementById('ei-mag').value.trim();
+  if(!v)return;
+  const idx=state.magazyny.indexOf(old);
+  if(idx>=0){state.magazyny[idx]=v;}
+  state.items.forEach(i=>{if(i.magazynSprzedazy===old)i.magazynSprzedazy=v;});
+  save();renderSettings();toast('✅ Zmieniono: '+v);
+}
+function editKat(id){
+  const row=document.getElementById('row-kat-'+id);
+  if(!row)return;
+  const kat=[...KATEGORIE,...(state.kategorie||[])].find(k=>k.id===id);
+  if(!kat)return;
+  row.innerHTML=`
+    <input type="text" id="ei-kat-icon" value="${kat.icon}" style="width:32px;text-align:center;font-size:16px;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 5px">
+    <input type="text" id="ei-kat-nazwa" value="${kat.nazwa}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:12px;margin:0 4px">
+    <button class="btn btn-primary" style="padding:2px 8px;font-size:10px" onclick="saveEditKat('${id}')">✓</button>
+    <button class="btn btn-ghost" style="padding:2px 8px;font-size:10px" onclick="renderSettings()">✕</button>`;
+}
+function saveEditKat(id){
+  const icon=document.getElementById('ei-kat-icon').value.trim()||'🏷';
+  const nazwa=document.getElementById('ei-kat-nazwa').value.trim();
+  if(!nazwa)return;
+  // update in KATEGORIE (built-in) or state.kategorie (custom)
+  const bi=KATEGORIE.find(k=>k.id===id);
+  if(bi){bi.icon=icon;bi.nazwa=nazwa;}
+  else{
+    const ci=(state.kategorie||[]).find(k=>k.id===id);
+    if(ci){ci.icon=icon;ci.nazwa=nazwa;save();}
+  }
+  renderSettings();toast('✅ Zapisano kategorię');
+}
+function editKatIcon(id){ editKat(id); }
+function editProd(idx){
+  const row=document.getElementById('row-prod-'+idx);
+  if(!row)return;
+  const cur=ALL_PRODUCTS[idx];
+  row.innerHTML=`<input type="text" id="ei-prod" value="${cur}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:12px">
+    <button class="btn btn-primary" style="padding:2px 8px;font-size:10px" onclick="saveEditProd(${idx})">✓</button>
+    <button class="btn btn-ghost" style="padding:2px 8px;font-size:10px" onclick="renderSettings()">✕</button>`;
+}
+function saveEditProd(idx){
+  const v=document.getElementById('ei-prod').value.trim();
+  if(!v)return;
+  const old=ALL_PRODUCTS[idx];
+  if(!state.products) state.products=[...DEF_PRODUCTS];
+  state.products[idx]=v;
+  state.items.forEach(i=>{if(i.produkt===old)i.produkt=v;});
+  syncListsFromState();
+  save();renderSettings();toast('✅ Zmieniono: '+v);
+}
+function delProd(idx){
+  const p=ALL_PRODUCTS[idx];
+  if(!confirm('Usunąć produkt "'+p+'" z listy?'))return;
+  if(!state.products) state.products=[...DEF_PRODUCTS];
+  state.products.splice(idx,1);
+  syncListsFromState();
+  save();renderSettings();toast('Usunięto: '+p);
+}
+
+function addMarka(){
+  const v=document.getElementById('inp-marka-nazwa').value.trim();
+  if(!v){toast('Podaj nazwę marki');return;}
+  if(ALL_MARKI.includes(v)){toast('Marka już istnieje');return;}
+  if(!state.marki) state.marki=[...DEF_MARKI];
+  state.marki.push(v);state.marki.sort((a,b)=>a.localeCompare(b,'pl'));
+  syncListsFromState();
+  document.getElementById('inp-marka-nazwa').value='';
+  save();renderSettings();toast('✅ '+v);
+}
+function editMarka(idx){const row=document.getElementById('row-marka-'+idx);if(!row)return;const cur=ALL_MARKI[idx];row.innerHTML=`<input type="text" id="ei-marka" value="${cur}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:11px"><button class="btn btn-primary" style="padding:2px 7px;font-size:10px" onclick="saveEditMarka(${idx})">✓</button><button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="renderSettings()">✕</button>`;}
+function saveEditMarka(idx){
+  const v=document.getElementById('ei-marka').value.trim();if(!v)return;
+  const old=ALL_MARKI[idx];
+  if(!state.marki) state.marki=[...DEF_MARKI];
+  state.marki[idx]=v;
+  state.items.forEach(i=>{if(i.marka===old)i.marka=v;});
+  syncListsFromState();save();renderSettings();toast('✅ '+v);
+}
+function delMarka(idx){
+  const m=ALL_MARKI[idx];if(!confirm('Usunąć markę "'+m+'"?'))return;
+  if(!state.marki) state.marki=[...DEF_MARKI];
+  state.marki.splice(idx,1);
+  syncListsFromState();save();renderSettings();toast('Usunięto: '+m);
+}
+
+function addKolor(){const v=document.getElementById('inp-kolor-nazwa').value.trim();if(!v){toast('Podaj kolor');return;}if(state.kolory.includes(v)){toast('Kolor już istnieje');return;}state.kolory.push(v);state.kolory.sort((a,b)=>a.localeCompare(b,'pl'));document.getElementById('inp-kolor-nazwa').value='';save();renderSettings();toast('✅ '+v);}
+function editKolor(idx){const row=document.getElementById('row-kolor-'+idx);if(!row)return;const cur=state.kolory[idx];row.innerHTML=`<input type="text" id="ei-kolor" value="${cur}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:11px"><button class="btn btn-primary" style="padding:2px 7px;font-size:10px" onclick="saveEditKolor(${idx})">✓</button><button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="renderSettings()">✕</button>`;}
+function saveEditKolor(idx){const v=document.getElementById('ei-kolor').value.trim();if(!v)return;const old=state.kolory[idx];state.kolory[idx]=v;state.items.forEach(i=>{if(i.kolor===old)i.kolor=v;});save();renderSettings();toast('✅ '+v);}
+function delKolor(idx){const k=state.kolory[idx];if(!confirm('Usunąć kolor "'+k+'"?'))return;state.kolory.splice(idx,1);save();renderSettings();toast('Usunięto: '+k);}
+
+function addRozmiar(){const v=document.getElementById('inp-rozmiar-nazwa').value.trim();if(!v){toast('Podaj rozmiar');return;}if(state.rozmiary.includes(v)){toast('Rozmiar już istnieje');return;}state.rozmiary.push(v);document.getElementById('inp-rozmiar-nazwa').value='';save();renderSettings();toast('✅ '+v);}
+function editRozmiar(idx){const row=document.getElementById('row-rozmiar-'+idx);if(!row)return;const cur=state.rozmiary[idx];row.innerHTML=`<input type="text" id="ei-rozmiar" value="${cur}" style="flex:1;background:var(--bg2);color:var(--text1);border:1px solid var(--accent);border-radius:5px;padding:3px 7px;font-size:11px"><button class="btn btn-primary" style="padding:2px 7px;font-size:10px" onclick="saveEditRozmiar(${idx})">✓</button><button class="btn btn-ghost" style="padding:2px 7px;font-size:10px" onclick="renderSettings()">✕</button>`;}
+function saveEditRozmiar(idx){const v=document.getElementById('ei-rozmiar').value.trim();if(!v)return;state.rozmiary[idx]=v;save();renderSettings();toast('✅ '+v);}
+function delRozmiar(idx){const r=state.rozmiary[idx];if(!confirm('Usunąć rozmiar "'+r+'"?'))return;state.rozmiary.splice(idx,1);save();renderSettings();toast('Usunięto: '+r);}
+
+function addProd(){
+  const v=document.getElementById('inp-prod-nazwa').value.trim();
+  if(!v){toast('Podaj nazwę produktu');return;}
+  if(ALL_PRODUCTS.includes(v)){toast('Produkt już istnieje');return;}
+  if(!state.products) state.products=[...DEF_PRODUCTS];
+  state.products.push(v);state.products.sort((a,b)=>a.localeCompare(b,'pl'));
+  syncListsFromState();
+  document.getElementById('inp-prod-nazwa').value='';
+  save();renderSettings();toast('✅ Dodano: '+v);
 }
 function addKat(){
   const icon=(document.getElementById('inp-kat-icon').value.trim())||'🏷';
@@ -1762,7 +2128,15 @@ function renderHistoria(){
 }
 
 function showPage(p){
-  ['magazyn','analizy','settings','historia'].forEach(n=>{document.getElementById('page-'+n).style.display=n===p?'':'none';});
+  const isMag = p==='magazyn';
+  document.getElementById('body').style.display = isMag ? 'flex' : 'none';
+  const fw = document.getElementById('fullpage-wrap');
+  fw.style.display = isMag ? 'none' : 'flex';
+  fw.style.flexDirection = 'column';
+  ['analizy','settings','historia'].forEach(n=>{
+    const el=document.getElementById('page-'+n);
+    if(el)el.style.display=n===p?'':'none';
+  });
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   const t=document.getElementById('tab-'+p);if(t)t.classList.add('active');
   if(p==='settings')renderSettings();
@@ -1780,7 +2154,7 @@ initFirebase();
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    navigator.serviceWorker.register('/fabest/sw.js').catch(()=>{});
   });
 }
 </script>
