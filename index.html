@@ -2391,7 +2391,8 @@ function closeModal(){document.getElementById('overlay').classList.remove('open'
 function bgClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
 function renderAll(){renderStats();renderChips();applyFilters();}
 initSidebarLists();
-checkLogin();
+showPage('magazyn');  // zawsze zaczynamy na magazynie
+checkLogin();         // ukryje app jeśli niezalogowany
 renderAll();
 initFirebase();
 // Wykryj mobile i ustaw klasy
