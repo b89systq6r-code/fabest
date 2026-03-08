@@ -221,6 +221,51 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
   #fab-add{display:none;}
   #bottom-nav{display:none !important;}
 }
+/* MOBILE FILTER BAR */
+#mob-filter-bar{display:none;flex-direction:column;gap:6px;padding:8px 10px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+#mob-filter-bar input[type=search]{width:100%;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;box-sizing:border-box;outline:none;}
+#mob-filter-bar input[type=search]:focus{border-color:var(--accent);}
+.mob-filter-row{display:flex;gap:6px;}
+.mob-sel{flex:1;min-width:0;background:var(--bg2);color:var(--text1);border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:12px;outline:none;}
+.mob-sel:focus{border-color:var(--accent);}
+.mob-filter-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+.mob-filter-scroll::-webkit-scrollbar{display:none;}
+.mob-fchip{flex-shrink:0;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;cursor:pointer;white-space:nowrap;}
+.mob-fchip.on{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600;}
+.mob-fchip.wolny.on{background:var(--gold);color:#000;border-color:var(--gold);}
+.mob-fchip.sold.on{background:var(--surface2);color:var(--accent);border-color:var(--accent);}
+@media(max-width:850px){
+  #mob-filter-bar{display:flex;}
+}
+/* MOBILE CARDS */
+
+.mob-cards{display:flex;flex-direction:column;gap:8px;padding:8px 10px;}
+.mob-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;min-height:120px;transition:background .15s;}
+.mob-card:active{background:var(--surface2);}
+.mob-card.active{border-left:4px solid var(--green-bright);}
+.mob-card.wolny{border-left:4px solid var(--gold);}
+.mob-card.sold{border-left:4px solid var(--accent);opacity:.75;}
+.mob-card-img{width:90px;min-width:90px;display:flex;align-items:stretch;flex-shrink:0;overflow:hidden;}
+.mob-card-img img{width:90px;height:100%;object-fit:cover;display:block;}
+.mob-no-photo{align-items:center!important;justify-content:center;font-size:36px;background:var(--surface2);}
+.mob-card-body{flex:1;min-width:0;padding:9px 11px;display:flex;flex-direction:column;gap:5px;}
+.mc-line1{display:flex;align-items:center;flex-wrap:wrap;gap:0;line-height:1.4;}
+.mc-kat{font-size:10px;color:var(--text3);font-weight:600;white-space:nowrap;}
+.mc-sep{font-size:12px;color:var(--border2);margin:0 6px;}
+.mc-prod{font-size:14px;font-weight:700;color:var(--text);}
+.mc-marka{font-size:13px;font-weight:700;color:var(--accent);}
+.mob-card-details{display:flex;flex-wrap:wrap;gap:3px;}
+.mob-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.mob-tag.konto{background:rgba(200,241,53,.1);color:var(--accent);border-color:rgba(200,241,53,.25);}
+.mob-tag.muted{color:var(--text3);}
+.mob-card-konta{display:flex;flex-wrap:wrap;gap:3px;padding-top:4px;border-top:1px solid var(--border);}
+.mob-card-prices{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding-top:5px;border-top:1px solid var(--border);}
+.mob-price{text-align:center;}
+.mob-price-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;}
+.mob-price-val{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;}
+.mob-price-val.pos{color:var(--green-bright);}
+.mob-price-val.neg{color:var(--red);}
+/* MOBILE CARDS */
 /* BOTTOM NAV */
 #bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--border);z-index:100;align-items:stretch;}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;padding:0;transition:color .15s;border-top:2px solid transparent;}
@@ -348,7 +393,25 @@ label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;
   <button id="fab-add" onclick="openAddModal()">＋</button>
   <main id="content">
     <div id="page-magazyn">
-      <div class="sec-hdr"><h2>Magazyn FABEST</h2><span class="sec-meta" id="res-count"></span></div>
+      <!-- MOBILE FILTER BAR -->
+      <div id="mob-filter-bar">
+        <input type="search" id="mob-q" placeholder="🔍 Szukaj produktu, marki, koloru…" oninput="mobSearch(this.value)">
+        <div class="mob-filter-row">
+          <select id="mob-kat" onchange="mobSetFilt('kat',this.value)" class="mob-sel"><option value="">Kategoria</option></select>
+          <select id="mob-prod" onchange="mobSetFilt('prod',this.value)" class="mob-sel"><option value="">Produkt</option></select>
+        </div>
+        <div class="mob-filter-row">
+          <select id="mob-marka" onchange="mobSetFilt('marka',this.value)" class="mob-sel"><option value="">Marka</option></select>
+          <select id="mob-rozmiar" onchange="mobSetFilt('rozmiar',this.value)" class="mob-sel"><option value="">Rozmiar</option></select>
+          <select id="mob-kolor" onchange="mobSetFilt('kolor',this.value)" class="mob-sel"><option value="">Kolor</option></select>
+        </div>
+        <div class="mob-filter-scroll" id="mob-status-chips">
+          <span class="mob-fchip on" data-f="status" data-v="active" onclick="mobToggleChip(this)">🟢 Aktywne</span>
+          <span class="mob-fchip wolny on" data-f="status" data-v="wolny" onclick="mobToggleChip(this)">🟡 Wolne</span>
+          <span class="mob-fchip sold on" data-f="status" data-v="sold" onclick="mobToggleChip(this)">✓ Sprzedane</span>
+        </div>
+      </div>
+      <div style="padding:4px 12px;font-size:11px;color:var(--text3)"><span id="res-count"></span></div>
       <div class="tbl-wrap">
         <div class="tbl-head" id="tbl-head"></div>
         <div class="tbl-body" id="tbl-body"></div>
@@ -812,7 +875,7 @@ function initSidebarLists(){
   // fill kategoria
   const ks=document.getElementById('filt-kategoria');
   if(ks){ks.innerHTML='<option value="">Wszystkie</option>'+KATEGORIE.map(k=>`<option value="${k.id}">${k.icon} ${k.nazwa}</option>`).join('');}
-  renderChips();renderSortPills();renderOkresVals();updateOkresLabel();
+  renderChips();renderSortPills();renderOkresVals();updateOkresLabel();renderMobKatChips();
 }
 
 const SORT_COLS=[
@@ -1000,8 +1063,55 @@ const GT='68px 24px minmax(90px,0.9fr) minmax(110px,1.4fr) minmax(100px,1.1fr) 5
 const MW='1200px';
 const GSTYLE=`display:grid;grid-template-columns:${GT};min-width:${MW};`;
 
+// MOBILE FILTER FUNCTIONS
+function mobSearch(val){
+  const deskQ=document.getElementById('q');
+  if(deskQ) deskQ.value=val;
+  applyFilters();
+}
+function mobToggleChip(el){
+  const f=el.dataset.f,v=el.dataset.v,set=filt[f];
+  if(set.has(v)){set.delete(v);el.classList.remove('on');}
+  else{set.add(v);el.classList.add('on');}
+  applyFilters();
+}
+function mobSetFilt(type, val){
+  // sync z desktop selectami
+  const map={kat:'filt-kategoria',prod:'filt-produkt',marka:'filt-marka',rozmiar:'filt-rozmiar',kolor:'filt-kolor'};
+  const desk=document.getElementById(map[type]);
+  if(desk) desk.value=val;
+  // gdy zmienia się kategoria — przefiltruj produkty w mob-prod
+  if(type==='kat'){
+    const prodSel=document.getElementById('mob-prod');
+    if(prodSel){
+      const prods=val?ALL_PRODUCTS.filter(p=>getKatId(p)===val):ALL_PRODUCTS;
+      prodSel.innerHTML=`<option value="">Produkt</option>`+prods.map(p=>`<option value="${p}">${p}</option>`).join('');
+    }
+  }
+  applyFilters();
+}
+function renderMobSelects(){
+  const katSel=document.getElementById('mob-kat');
+  if(katSel){
+    const allKats=[...KATEGORIE,...(state.kategorie||[])];
+    katSel.innerHTML=`<option value="">Kategoria</option>`+allKats.map(k=>`<option value="${k.id}">${k.icon} ${k.nazwa}</option>`).join('');
+  }
+  const prodSel=document.getElementById('mob-prod');
+  if(prodSel) prodSel.innerHTML=`<option value="">Produkt</option>`+ALL_PRODUCTS.map(p=>`<option value="${p}">${p}</option>`).join('');
+  const markaSel=document.getElementById('mob-marka');
+  if(markaSel) markaSel.innerHTML=`<option value="">Marka</option>`+ALL_MARKI.map(m=>`<option value="${m}">${m}</option>`).join('');
+  const rozSel=document.getElementById('mob-rozmiar');
+  if(rozSel) rozSel.innerHTML=`<option value="">Rozmiar</option>`+state.rozmiary.map(r=>`<option value="${r}">${r}</option>`).join('');
+  const kolSel=document.getElementById('mob-kolor');
+  if(kolSel) kolSel.innerHTML=`<option value="">Kolor</option>`+state.kolory.map(k=>`<option value="${k}">${k}</option>`).join('');
+}
+function renderMobKatChips(){ renderMobSelects(); }
 function applyFilters(){
-  const q=document.getElementById('q').value.toLowerCase();
+  // sync mob search bar → desktop q
+  const mobQEl=document.getElementById('mob-q');
+  const deskQEl=document.getElementById('q');
+  if(mobQEl&&deskQEl&&document.activeElement===mobQEl) deskQEl.value=mobQEl.value;
+  const q=deskQEl?deskQEl.value.toLowerCase():'';
   const fp=document.getElementById('filt-produkt').value;
   const fm=document.getElementById('filt-marka').value;
   const fr=document.getElementById('filt-rozmiar').value;
@@ -1083,6 +1193,64 @@ function applyFilters(){
   }).join('');
 
   if(!items.length){document.getElementById('tbl-body').innerHTML='';return;}
+
+  // Mobile: widok kart
+  if(window.innerWidth <= 850){
+    document.getElementById('tbl-head').style.display='none';
+    document.getElementById('tbl-body').innerHTML=
+      '<div class="mob-cards">'+items.map(item=>{
+        const s=getStatus(item);
+        const kat=getKat(item.produkt);
+
+        // Zdjęcie po lewej — pełna wysokość. Bez zdjęcia: ciemne tło z ikoną kategorii
+        const photoEl=item.foto
+          ?`<div class="mob-card-img"><img src="${item.foto}" loading="lazy"></div>`
+          :`<div class="mob-card-img mob-no-photo"><span>${kat.icon}</span></div>`;
+
+        // Linia 1: Kategoria | Produkt | Marka — separatory pionowe
+        const line1=`<div class="mc-line1">
+          <span class="mc-kat">${kat.icon}&nbsp;${kat.nazwa}</span>
+          <span class="mc-sep">|</span>
+          <span class="mc-prod">${item.produkt||'—'}</span>
+          <span class="mc-sep">|</span>
+          <span class="mc-marka">${item.marka||'—'}</span>
+        </div>`;
+
+        // Szczegóły
+        const details=[
+          item.rozmiar?`<span class="mob-tag">Rozm.&nbsp;${item.rozmiar}</span>`:'',
+          item.kolor?`<span class="mob-tag">Kolor:&nbsp;${item.kolor}</span>`:'',
+          item.szerokosc?`<span class="mob-tag">szer.&nbsp;${fmtD(item.szerokosc)}&nbsp;cm</span>`:'',
+          item.dlugoscCalkowita?`<span class="mob-tag">dł.&nbsp;${fmtD(item.dlugoscCalkowita)}&nbsp;cm</span>`:'',
+          item.rekawNogawka?`<span class="mob-tag">rękaw&nbsp;${fmtD(item.rekawNogawka)}&nbsp;cm</span>`:'',
+          item.szczegoly?`<span class="mob-tag">${item.szczegoly}</span>`:'',
+        ].filter(Boolean).join('');
+
+        // Konta / magazyny
+        const kontaTags=(item.konta&&item.konta.length)
+          ?item.konta.map(k=>`<span class="mob-tag konto">${k}</span>`).join('')
+          :`<span class="mob-tag muted">niewystawione</span>`;
+
+        // Ceny
+        const cZakup=`<div class="mob-price"><div class="mob-price-lbl">Zakup</div><div class="mob-price-val">${fmt(item.cenaZakupu)}</div></div>`;
+        const cStart=`<div class="mob-price"><div class="mob-price-lbl">Startowa</div><div class="mob-price-val">${item.cenaStartowa?fmt(item.cenaStartowa):'—'}</div></div>`;
+        const cSprzed=`<div class="mob-price"><div class="mob-price-lbl">Sprzedaż</div><div class="mob-price-val">${item.cenaSprzedazy!=null?fmt(item.cenaSprzedazy):'—'}</div></div>`;
+        const cZysk=`<div class="mob-price"><div class="mob-price-lbl">Zysk</div><div class="mob-price-val ${item.zysk!=null?(item.zysk>=0?'pos':'neg'):''}">${item.zysk!=null?fmt(item.zysk):'—'}</div></div>`;
+
+        return`<div class="mob-card ${s}" onclick="openItem(${item.id})">
+          ${photoEl}
+          <div class="mob-card-body">
+            ${line1}
+            ${details?`<div class="mob-card-details">${details}</div>`:''}
+            <div class="mob-card-konta">${kontaTags}</div>
+            <div class="mob-card-prices">${cZakup}${cStart}${cSprzed}${cZysk}</div>
+          </div>
+        </div>`;
+      }).join('')+'</div>';
+    return;
+  }
+  }
+  document.getElementById('tbl-head').style.display='';
 
   document.getElementById('tbl-body').innerHTML=items.map(item=>{
     const s=getStatus(item);
